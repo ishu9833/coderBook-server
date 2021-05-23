@@ -1,0 +1,25 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "we are going to make a coder media like any other social media but their is some differnce. let's see what it will be.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js" 
+  },
+  "keywords": [
+    "mern-stack",
+    "express",
+    "js",
+    "jsonwebtoken",
+    "bcrypt",
+    "nodemon",
+    "cookies-parser"
+  ],
+  "author": "Ishtiaque",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongodb": "^3.6.8",
+    "mongoose": "^5.12.10"
+  }
+}
