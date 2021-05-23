@@ -6,7 +6,12 @@ const app = express()
 
 const DB = 'mongodb://mernstack:mernstack-1234@cluster0-shard-00-00.iwo8o.mongodb.net:27017,cluster0-shard-00-01.iwo8o.mongodb.net:27017,cluster0-shard-00-02.iwo8o.mongodb.net:27017/coderDataBase?ssl=true&replicaSet=atlas-tce7jv-shard-0&authSource=admin&retryWrites=true&w=majority'
 
-mongoose.connect(DB).then(()=> {
+mongoose.connect(DB, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true, 
+    useFindAndModify: false
+}).then(()=> {
     console.log('connection successful')
 }).catch((err) => {
     console.log(err, `connection failed`)
