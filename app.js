@@ -1,15 +1,12 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const dotenv = require('dotenv')
 
 const app = express()
-dotenv.config({path: './config.env'})
+dotenv.config({ path: './config.env' })
 require('./db/connection')
-
+const User = require('./model/UserSchema')
 
 const PORT = process.env.PORT
-
-
 
 const middleware = (req, res, next) => {
   console.log('you just hit me!')
