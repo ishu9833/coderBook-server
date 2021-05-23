@@ -1,50 +1,42 @@
-const express = require("express");
-const mongoose = require("mongoose")
+const express = require('express')
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+
 const app = express()
+dotenv.config({path: './config.env'})
+require('./db/connection')
 
 
+const PORT = process.env.PORT
 
-const DB = 'mongodb://mernstack:mernstack-1234@cluster0-shard-00-00.iwo8o.mongodb.net:27017,cluster0-shard-00-01.iwo8o.mongodb.net:27017,cluster0-shard-00-02.iwo8o.mongodb.net:27017/coderDataBase?ssl=true&replicaSet=atlas-tce7jv-shard-0&authSource=admin&retryWrites=true&w=majority'
-
-mongoose.connect(DB, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true, 
-    useFindAndModify: false
-}).then(()=> {
-    console.log('connection successful')
-}).catch((err) => {
-    console.log(err, `connection failed`)
-})
 
 
 const middleware = (req, res, next) => {
-    console.log('you just hit me!')
-    next()
+  console.log('you just hit me!')
+  next()
 }
 
-
-app.get('/', (req, res)=> {
-    res.send(`hello world from back-end`)
+app.get('/', (req, res) => {
+  res.send(`hello world from back-end`)
 })
 
-app.get('/about', middleware ,(req, res)=> {
-    console.log('You hit about page')
-    res.send(`hey, I am about-me section from back-end`)
+app.get('/about', middleware, (req, res) => {
+  console.log('You hit about page')
+  res.send(`hey, I am about-me section from back-end`)
 })
 
-app.get('/contact', (req, res)=> {
-    res.send(`hey, I am contact  section from back-end`)
+app.get('/contact', (req, res) => {
+  res.send(`hey, I am contact  section from back-end`)
 })
 
-app.get('/signin', (req, res)=> {
-    res.send(`hey, I am sign-in  section from back-end`)
+app.get('/signin', (req, res) => {
+  res.send(`hey, I am sign-in  section from back-end`)
 })
 
-app.get('/register', (req, res)=> {
-    res.send(`hey, I am register  section from back-end`)
+app.get('/register', (req, res) => {
+  res.send(`hey, I am register  section from back-end`)
 })
 
-app.listen(3001, ()=>{
-    console.log(`back-end is running on port 3001`)
+app.listen(PORT, () => {
+  console.log(`back-end is running on port ${PORT}`)
 })
