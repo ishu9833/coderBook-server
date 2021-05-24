@@ -8,33 +8,46 @@ router.get('/', (req, res) => {
   res.send(`hello world from back-end`)
 })
 
-router.post('/register', (req, res) => {
+
+//registration route
+router.post('/register', async (req, res) => {
+  //read data from register form
   const { name, email, phone, work, password, cpassword } = req.body
 
+  //check is all data exist or not
   if (!name || !email || !phone || !work || !password || !cpassword) {
     return res.status(422).json({ error: 'please confirm the all filed' })
   }
 
-  User.findOne({ email: email }).then(userExist => {
+  //now here two case 1. if user email will be new or
+  //2. user email will already exist on the database
+  //so write tryCatch block
+
+  try {
+    //fined to database
+    const userExist = await User.findOne({ email: email })
+    //try--- userEmailExist? if it's true return some error message
     if (userExist) {
       return res.status(422).json({ error: 'This email already in use!' })
     }
+
+    //if it's false --- make new user
     const user = new User({ name, email, phone, work, password, cpassword })
 
-    user
-      .save()
-      .then(() => {
-        res.
-          status(201)
-            .json({ message: 'user registered successfully' })
-            .catch(err => {
-              res.status(500).json({ error: 'failed to registered' })
-            })
-      })
-      .catch(err => {
-        console.log(err)
-      })
-  })
+    //then new user should be registered and save the data to database
+    const userRegister = await user.save()
+
+    //now there are two part 1. registration will done or
+    //2. registration failed
+
+    if (userRegister) {
+      res.status(201).json({ message: 'user registered successfully' })
+    } else {
+      res.status(500).json({ error: 'failed to registered' })
+    }
+  } catch (err) {
+    console.log(err)
+  }
 })
 
 router.get('/about', (req, res) => {
