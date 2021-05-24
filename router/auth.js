@@ -8,7 +8,6 @@ router.get('/', (req, res) => {
   res.send(`hello world from back-end`)
 })
 
-
 //registration route
 router.post('/register', async (req, res) => {
   //read data from register form
@@ -35,16 +34,12 @@ router.post('/register', async (req, res) => {
     const user = new User({ name, email, phone, work, password, cpassword })
 
     //then new user should be registered and save the data to database
-    const userRegister = await user.save()
+    await user.save()
 
     //now there are two part 1. registration will done or
     //2. registration failed
 
-    if (userRegister) {
-      res.status(201).json({ message: 'user registered successfully' })
-    } else {
-      res.status(500).json({ error: 'failed to registered' })
-    }
+    res.status(201).json({ message: 'user registered successfully' })
   } catch (err) {
     console.log(err)
   }
