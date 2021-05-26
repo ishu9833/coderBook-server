@@ -1,5 +1,6 @@
 const express = require('express')
 const bcrypt = require('bcryptjs')
+
 const router = express.Router()
 
 // require('./db/connection')
@@ -46,30 +47,30 @@ router.post('/register', async (req, res) => {
   }
 })
 
-
 //login route
 router.post('/signin', async (req, res) => {
-  try{
+  try {
     const { email, password } = req.body
-    if(!email || !password) {
-      return res.status(400).json({message: "please, fill the all field."})
+    if (!email || !password) {
+      return res.status(400).json({ message: 'please, fill the all field.' })
     }
-    const userLogin = await User.findOne({email:email})
+    const userLogin = await User.findOne({ email: email })
 
-    if(userLogin) {
+    if (userLogin) {
       const isMatched = await bcrypt.compare(password, userLogin.password)
 
-      if(!isMatched) {
-        res.status(400).json({error: "invalid credentials !"})
-      }else{
-        res.status(200).json({message: "user logged in successfully"})
+      const token = await userLogin.generateAuthToken();
+      console.log(token)
+
+      if (!isMatched) {
+        res.status(400).json({ error: 'invalid credentials !' })
+      } else {
+        res.status(200).json({ message: 'user logged in successfully' })
       }
-    } else{
-      res.status(400).json({error: "invalid credentials !"})
+    } else {
+      res.status(400).json({ error: 'invalid credentials !' })
     }
-    
-    
-  }catch(err) {
+  } catch (err) {
     console.log(err)
   }
 })
@@ -82,7 +83,5 @@ router.get('/about', (req, res) => {
 router.get('/contact', (req, res) => {
   res.send(`hey, I am contact  section from back-end`)
 })
-
-
 
 module.exports = router
