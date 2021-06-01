@@ -2,9 +2,16 @@ const express = require('express')
 const bcrypt = require('bcryptjs')
 
 const router = express.Router()
+const cookieParser = require('cookie-parser');
+
+// const express = require('express')
+
+const app = express()
+app.use(cookieParser())
 
 // require('./db/connection')
 const User = require('../model/UserSchema')
+const authentication = require('../middleware/authentication')
 
 router.get('/', (req, res) => {
   res.send(`hello world from back-end`)
@@ -60,7 +67,12 @@ router.post('/signin', async (req, res) => {
       const isMatched = await bcrypt.compare(password, userLogin.password)
 
       const token = await userLogin.generateAuthToken();
-      console.log(token)
+      // console.log(token)
+
+      res.cookie("jwtoken", token, {
+        expires: new Date(Date.now() + 25892000000),
+        httpOnly: true
+      })
 
       if (!isMatched) {
         res.status(400).json({ error: 'invalid credentials !' })
@@ -75,9 +87,10 @@ router.post('/signin', async (req, res) => {
   }
 })
 
-router.get('/about', (req, res) => {
-  console.log('You hit about page')
-  res.send(`hey, I am about-me section from back-end`)
+router.get('/about',authentication , (req, res) => {
+  
+  console.log('You hit about page');
+  res.send(req.rootUser)
 })
 
 router.get('/contact', (req, res) => {
